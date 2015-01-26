@@ -1,0 +1,267 @@
+<!doctype html>
+<html ng-app="consoleApp">
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.10/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.10/angular-resource.min.js"></script>
+<script src="javascripts/ui-bootstrap-tpls-0.12.0.min.js"></script>
+<script src="console.js"></script>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+<style type="text/css">
+  .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
+  body {
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    background-color: #DEE1DD;
+  }
+  td, th {
+    border: 1px solid #999;
+    padding: 0.5rem;
+    text-align:left;
+  }
+  table {
+    border-spacing: 0.5rem;
+    border-collapse: collapse;
+  }
+  .commandBlock {
+    border: 2px solid;
+    border-radius: 25px;
+    padding-left: 2em;
+    padding-top: 1em;
+    padding-right: 2em;
+    padding-bottom: 1em;
+    float: left;
+    clear: both;
+  }
+  .cmdTitle {
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    color: #85794D;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .cmdCommand {
+    padding-top: 0.2em;
+    padding-bottom: 0.5em;
+    font-size: 14px;
+    font-style: italic;
+  }
+  .cmdReturn {
+      padding-top: 0.2em;
+      padding-bottom: 0.5em;
+      font-size: 14px;
+      font-style: normal;
+  }
+
+  #topBar {
+      background-color: #26ADA1;
+      width: 100%;
+      color: #DEE1DD;
+      height: 40px;
+      line-height: 40px;
+      text-align: left;
+  }
+  #title {
+      font-size: 25px;
+      font-weight: bold;
+      font-style: normal;
+      padding-left: 0.5em;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: normal;
+  }
+  #cmdSelectorPanel {
+      float:left;
+      clear:left;
+      background-color: #EBEBE6;
+      border: 1px solid;
+      display: inline-block;
+      padding-top: 0.5em;
+      padding-left: 0.5em;
+      padding-right: 0.5em;
+      padding-bottom: 0.5em;
+  }
+  #activeCmdPanel {
+      float:left;
+      clear:left;
+      border: 1px solid;
+      display: inline-block;
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+      padding-top: 0.5em;
+      padding-left: 0.5em;
+      padding-right: 0.5em;
+      padding-bottom: 0.5em;
+  }
+
+  .commandPanel {
+      display: inline-block;
+      width: 700px;
+      font-weight: bold;
+      background-color: #C4CDC1;
+  }
+
+  .commandInfoPanel {
+      display: inline-block;
+      width: 700px;
+      font-weight: bold;
+      font-
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+      background-color: #C4CDC1;
+  }
+
+  .resultInfoPanel {
+      display: inline-block;
+      width: 700px;
+      font-weight: bold;
+      font-
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+      background-color: #C4CDC1;
+  }
+
+  #panelLeft {
+
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+      float:left;
+  }
+  #panelRight {
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+      margin-left: 1em;
+      float:left;
+  }
+</style>
+
+</head>
+<body>
+
+    <div ng-controller="ConsoleController" ng-init="getCommandConfigs()">
+
+        <div id="topBar">
+            <span id="title">powershell-command-executor-ui</span>
+        </div>
+
+        <div id="panelLeft">
+            <accordion close-others="oneAtATime" class="commandPanel">
+                <accordion-group heading="COMMAND SELECTOR" is-open="true">
+
+                    <div id="cmdSelectorPanel">
+                        <strong>Select a command: </strong>
+                        <select ng-change="onCommandSelected()"
+                            ng-model="selectedCommand"
+                            ng-options="cmd.commandName for cmd in commandConfigs track by cmd.commandName">
+                            <option value="">Select a Command
+                        </select>
+                    </div>
+
+                    <div id="activeCmdPanel" ng-show="!isEmpty(selectedCommand)">
+                        <div ng-repeat="commandConfig in commandConfigs">
+
+                            <form ng-show="selectedCommand.commandName == commandConfig.commandName"
+                                name="{{command.commandName}}">
+
+                            <div class="cmdTitle">{{commandConfig.commandName}}</div>
+                            <div class="cmdCommand">{{commandConfig.command}}</div>
+                            <div class="cmdReturns">Returns: {{commandConfig.return}}</div>
+
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>argument</th>
+                                        <th>value</th>
+                                        <th>options</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr ng-repeat="(argument,options) in commandConfig.arguments">
+                                        <td>{{argument}}</td>
+                                        <td>
+                                            <input ng-if="(options.valued == false ? false : true)"
+                                                type="text" ng-model="commandForms[commandConfig.commandName][argument]"
+                                                size="35"/>
+
+                                            <span ng-if="(options.valued == false)">is flag argument</span>
+                                        </td>
+                                        <td>
+                                            <span ng-if="isEmpty(options)">none</span>
+                                            <span ng-if="!isEmpty(options)">{{options}}</span>
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+                            </table>
+
+                            <input type="button" value="generate command sample below" ng-click="generate(commandConfig.commandName)"/>
+                            <input type="button" value="execute this command!" ng-click="execute(commandConfig.commandName)"/>
+                            <p/>
+
+                            </form>
+                        </div>
+                    </div>
+
+                </accordion-group>
+
+                <accordion-group heading="GENERATED COMMAND" is-open="true" class="commandInfo">
+                    <pre>{{generateInfo.command | json}}</pre>
+                </accordion-group>
+
+            </accordion>
+        </div>
+
+        <div id="panelRight">
+            <accordion close-others="oneAtATime" class="resultInfoPanel">
+                <accordion-group heading="EXECUTION INFO" is-open="true" class="commandInfo">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Command Name</th>
+                                <th>Started</th>
+                                <th>Finished</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{executeInfo.commandName}}</td>
+                                <td>{{executeInfo.startedAt | date:'yyyy-MM-dd HH:mm:ss Z'}}</td>
+                                <td>{{executeInfo.finishedAt | date:'yyyy-MM-dd HH:mm:ss Z'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </accordion-group>
+
+                <accordion-group heading="ARGUMENT INFO" is-open="false" class="commandInfo">
+                    <pre>{{executeInfo.arguments | json}}</pre>
+                </accordion-group>
+
+                <accordion-group heading="COMMAND CmdResult OBJECT" is-open="false" class="commandInfo">
+                    <pre>{{executeInfo.cmdResult | json}}</pre>
+                </accordion-group>
+
+                <accordion-group heading="STDOUT JSON RESULT OBJECT" is-open="false" class="commandInfo">
+                    <pre>{{executeInfo.cmdResult.resultObject | json}}</pre>
+                </accordion-group>
+
+                <accordion-group heading="COMMAND SERVICE INFO" is-open="false" class="commandInfo">
+                    <input type='button' value="get latest command-service status" ng-click="getCommandServiceStatus()"/>
+                    <pre>{{commandService.status | json}}</pre>
+                </accordion-group>
+
+            </accordion>
+        </div>
+
+    </div>
+
+</body>
+</html>
