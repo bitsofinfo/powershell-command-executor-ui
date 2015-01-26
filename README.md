@@ -22,6 +22,9 @@ AngularJS interface and simple Node.js REST api for testing Powershell command e
 
 6) In a browser go to http://localhost:3000
 
+7) You can tweak the commandRegistry provided by [o365Utils.js](https://github.com/bitsofinfo/powershell-command-executor/blob/master/o365Utils.js) as you wish to add additional command configurations, or modify `routes/index.js` to augment this structure manually as PSCommandService is constructed.
+
+8) DON'T expose this outside of localhost! Read the security section below.
 
 
 ###<a id="related"></a> Related Tools
