@@ -8,7 +8,7 @@ AngularJS interface and simple Node.js REST api for testing Powershell command e
 
 ![Alt text](/diagram1.png "Diagram1")
 
-###<a href="#setup"></a> Setup
+###<a name="#setup"></a> Setup
 
 1) Clone **this** repo
 
@@ -16,7 +16,7 @@ AngularJS interface and simple Node.js REST api for testing Powershell command e
 
 3) [Follow these instructions next](https://github.com/bitsofinfo/powershell-command-executor). Specifically you need to setup your stored encrypted credentials.
 
-4) Open `routes/index.js` and edit the `require` paths and `initCommands` paths as appropriate for your local setup.
+4) Open `routes/index.js` and edit the `require` paths (specifically the path to where powershell-command-executor was cloned) and `initCommands` paths as appropriate for your local setup (i.e. paths to the encrypted credentials, secret key and decrypt routines described in item 3 above)
 
 5) Run `node bin\www`
 
