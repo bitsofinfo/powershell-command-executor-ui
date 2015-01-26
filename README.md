@@ -10,21 +10,21 @@ AngularJS interface and simple Node.js REST api for testing Powershell command e
 
 ###<a name="setup"></a> Setup
 
-1) Clone **this** repo
+1. Clone **this** repo
 
-2) Clone https://github.com/bitsofinfo/powershell-command-executor somewhere on the same machine (this module is not available via npm yet...)
+2. Clone https://github.com/bitsofinfo/powershell-command-executor somewhere on the same machine (this module is not available via npm yet...)
 
-3) [Follow these instructions next](https://github.com/bitsofinfo/powershell-command-executor). Specifically you need to setup your stored encrypted credentials.
+3. [Follow these instructions next](https://github.com/bitsofinfo/powershell-command-executor). Specifically you need to setup your stored encrypted credentials.
 
-4) Open `routes/index.js` and edit the `require` paths (specifically the path to where powershell-command-executor was cloned) and `initCommands` paths as appropriate for your local setup (i.e. paths to the encrypted credentials, secret key and decrypt routines described in item 3 above)
+4. Open `routes/index.js` and edit the `require` paths (specifically the path to where powershell-command-executor was cloned) and `initCommands` paths as appropriate for your local setup (i.e. paths to the encrypted credentials, secret key and decrypt routines described in item 3 above)
 
-5) Run `node bin\www`
+5. Run `node bin\www`
 
-6) In a browser go to http://localhost:3000
+6. In a browser go to http://localhost:3000
 
-7) You can tweak the commandRegistry provided by [o365Utils.js](https://github.com/bitsofinfo/powershell-command-executor/blob/master/o365Utils.js) as you wish to add additional command configurations, or modify `routes/index.js` to augment this structure manually as PSCommandService is constructed.
+7. You can tweak the commandRegistry provided by [o365Utils.js](https://github.com/bitsofinfo/powershell-command-executor/blob/master/o365Utils.js) as you wish to add additional command configurations, or modify `routes/index.js` to augment this structure manually as PSCommandService is constructed.
 
-8) DON'T expose this outside of localhost! Read the security section below.
+8. DON'T expose this outside of localhost! Read the security section below.
 
 
 ###<a id="related"></a> Related Tools
