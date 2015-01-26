@@ -31,9 +31,9 @@ var statefulProcessCommandProxy = new StatefulProcessCommandProxy({
   processGid : null,
 
   initCommands: o365Utils.getO365PSInitCommands(
-    'C:\\Users\\Administrator\\nodejs\\powershell-credential-encryption-tools\\decryptUtil.ps1',
-    'C:\\Users\\Administrator\\nodejs\\powershell-credential-encryption-tools\\encrypted.credentials',
-    'C:\\Users\\Administrator\\nodejs\\powershell-credential-encryption-tools\\secret.key',
+    'C:\\pathto\\powershell-credential-encryption-tools\\decryptUtil.ps1',
+    'C:\\pathto\\encrypted.credentials',
+    'C:\\pathto\\secret.key',
     10000,30000,60000),
 
 
@@ -65,7 +65,7 @@ router.get('/command/:commandName?', function(req, res, next) {
 
 });
 
-// GET commands
+// GET command-service status
 router.get('/command-service/status', function(req, res, next) {
     var status = psCommandService.getStatus();
     res.send(status);
@@ -81,7 +81,7 @@ router.post('/command/execute/:commandName', function(req, res, next) {
       });
 });
 
-// POST (generate command)
+// POST (generate command statement)
 router.post('/command/generate/:commandName', function(req, res, next) {
     var command = psCommandService.generateCommand(req.params.commandName,req.body);
     res.send({'command': command});
