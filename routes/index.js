@@ -1,6 +1,10 @@
 var express = require('express');
 var router = express.Router();
 
+var PATH_TO_DECRYPT_UTILS_SCRIPT = "c:\\pathto\\decryptUtil.ps1";
+var PATH_TO_ENCRYPTED_CREDENTIALS_FILE = "c:\\pathto\\encrypted.credentials";
+var PATH_TO_SECRET_KEY = "c:\\pathto\\secret.key";
+
 var o365Utils = require('../../powershell-command-executor/o365Utils');
 var PSCommandService = require('../../powershell-command-executor');
 var StatefulProcessCommandProxy = require('stateful-process-command-proxy');
@@ -31,10 +35,10 @@ var statefulProcessCommandProxy = new StatefulProcessCommandProxy({
   processGid : null,
 
   initCommands: o365Utils.getO365PSInitCommands(
-    'C:\\pathto\\powershell-credential-encryption-tools\\decryptUtil.ps1',
-    'C:\\pathto\\encrypted.credentials',
-    'C:\\pathto\\secret.key',
-    10000,30000,60000),
+                  PATH_TO_DECRYPT_UTILS_SCRIPT,
+                  PATH_TO_ENCRYPTED_CREDENTIALS_FILE,
+                  PATH_TO_SECRET_KEY,
+                  10000,30000,60000),
 
 
     validateFunction: function(processProxy) {
