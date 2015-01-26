@@ -8,7 +8,7 @@ AngularJS interface and simple Node.js REST api for testing Powershell command e
 
 ![Alt text](/diagram1.png "Diagram1")
 
-###<a name="#setup"></a> Setup
+###<a name="setup"></a> Setup
 
 1) Clone **this** repo
 
