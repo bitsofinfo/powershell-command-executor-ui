@@ -1,13 +1,13 @@
 var express = require('express');
 var router = express.Router();
 
-var PATH_TO_DECRYPT_UTILS_SCRIPT = "c:\\pathto\\decryptUtil.ps1";
-var PATH_TO_ENCRYPTED_CREDENTIALS_FILE = "c:\\pathto\\encrypted.credentials";
-var PATH_TO_SECRET_KEY = "c:\\pathto\\secret.key";
+var PATH_TO_DECRYPT_UTILS_SCRIPT = "C:\\pathto\\decryptUtil.ps1";
+var PATH_TO_ENCRYPTED_CREDENTIALS_FILE = "C:\\pathto\\encrypted.credentials";
+var PATH_TO_SECRET_KEY = "C:\\pathto\\secret.key";
 
 var o365Utils = require('../../powershell-command-executor/o365Utils');
 var PSCommandService = require('../../powershell-command-executor');
-var StatefulProcessCommandProxy = require('stateful-process-command-proxy');
+var StatefulProcessCommandProxy = require('../../stateful-process-command-proxy');
 
 
 var statefulProcessCommandProxy = new StatefulProcessCommandProxy({
@@ -46,11 +46,21 @@ var statefulProcessCommandProxy = new StatefulProcessCommandProxy({
     },
 
 
-    preDestroyCommands: o365Utils.getO365PSDestroyCommands()
+    preDestroyCommands: o365Utils.getO365PSDestroyCommands(),
+
+    processCmdBlacklistRegex: ['.*\\sdel\\s.*'],
+
+    autoInvalidationConfig: o365Utils.getO365AutoInvalidationConfig(30000)
 
   });
 
-var psCommandService = new PSCommandService(statefulProcessCommandProxy, o365Utils.o365CommandRegistry);
+var myLogFunction = function(severity,origin,message) {
+  console.log(severity.toUpperCase() + ' ' + origin + ' ' + message);
+}
+
+var psCommandService = new PSCommandService(statefulProcessCommandProxy,
+                                            o365Utils.o365CommandRegistry,
+                                            myLogFunction);
 
 
 /* GET - console page */
@@ -81,7 +91,7 @@ router.post('/command/execute/:commandName', function(req, res, next) {
       .then(function(cmdResult) {
           res.send(cmdResult);
       }).catch(function(error) {
-          res.send(error);
+          res.send({'error': { 'name': error.name, 'message': error.message, 'stack':error.stack}});
       });
 });
 
