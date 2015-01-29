@@ -5,9 +5,9 @@ var PATH_TO_DECRYPT_UTILS_SCRIPT = "C:\\pathto\\decryptUtil.ps1";
 var PATH_TO_ENCRYPTED_CREDENTIALS_FILE = "C:\\pathto\\encrypted.credentials";
 var PATH_TO_SECRET_KEY = "C:\\pathto\\secret.key";
 
-var o365Utils = require('../../powershell-command-executor/o365Utils');
-var PSCommandService = require('../../powershell-command-executor');
-var StatefulProcessCommandProxy = require('../../stateful-process-command-proxy');
+var o365Utils = require('powershell-command-executor/o365Utils');
+var PSCommandService = require('powershell-command-executor');
+var StatefulProcessCommandProxy = require('stateful-process-command-proxy');
 
 
 var statefulProcessCommandProxy = new StatefulProcessCommandProxy({
