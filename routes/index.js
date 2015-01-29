@@ -48,7 +48,9 @@ var statefulProcessCommandProxy = new StatefulProcessCommandProxy({
 
     preDestroyCommands: o365Utils.getO365PSDestroyCommands(),
 
-    processCmdBlacklistRegex: ['.*\\sdel\\s.*'],
+    processCmdBlacklistRegex: o365Utils.getO365BlacklistedCommands(),
+
+    processCmdWhitelistRegex: o365Utils.getO365WhitelistedCommands(),
 
     autoInvalidationConfig: o365Utils.getO365AutoInvalidationConfig(30000)
 
