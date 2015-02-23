@@ -37,6 +37,7 @@ Have a look at these related projects which support this module and are required
 
 * https://github.com/bitsofinfo/stateful-process-command-proxy - The root dependency of this module, provides the actual bridging between node.js and a pool of external shell processes
 * https://github.com/bitsofinfo/powershell-command-executor - The next dependency of this module, which provides the actual backend for the registry of executable commands and wraps the stateful-process-command-proxy
+* * https://github.com/bitsofinfo/meteor-shell-command-mgr - Small Meteor app that lets you manage/generate a command registry for powershell-command-executor
 
 ###<a id="security"></a> Security
 
